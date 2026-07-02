@@ -212,7 +212,15 @@ nav{
 .project-showcase-title{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:clamp(26px,3vw,36px);color:#fff;margin-bottom:8px;}
 .project-showcase-eyebrow{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;}
 .project-showcase-side{background:#15101f4d;border-left:1px solid var(--line);padding:34px 32px;display:flex;flex-direction:column;gap:26px;align-items:flex-start;min-width:0;}
-.project-showcase-logo{width:100%;cursor:pointer;transition:opacity .2s;background:#f5f0e8;border-radius:10px;padding:18px;}
+.project-showcase-logo {
+  width: 100%;
+  cursor: pointer;
+  transition: opacity .2s;
+  border-radius: 10px;
+  padding: 0; 
+  background: transparent; 
+  overflow: hidden;
+}
 .project-showcase-logo:hover{opacity:.85;}
 .project-showcase-block{width:100%;}
 .project-showcase-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px;}
