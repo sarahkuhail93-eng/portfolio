@@ -205,17 +205,18 @@ nav{
 }
 .project-img-duo img{
   width:100%;
-  aspect-ratio:4/3;
+  aspect-ratio:16/9;
   object-fit:cover;
   object-position:center;
   display:block;
-  background:#15101f;
+  background:var(--bg-card);
   border-radius:12px;
   border:1px solid var(--line);
-  cursor:pointer;
   transition:opacity .2s;
 }
-.project-img-duo img:hover{opacity:0.9;}
+.project-img-duo img.contain-img{
+  object-fit:contain;
+}
 .project-img-desc{padding:30px 32px;}
 .project-img-title{font-family:'Playfair Display',serif;font-size:23px;font-style:italic;margin-bottom:10px;color:#fff;}
 .project-img-desc p{font-size:16.5px;color:var(--ink-soft);line-height:1.7;}
@@ -227,8 +228,7 @@ nav{
 .project-showcase-title{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:clamp(26px,3vw,36px);color:#fff;margin-bottom:8px;}
 .project-showcase-eyebrow{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;}
 .project-showcase-side{background:#15101f4d;border-left:1px solid var(--line);padding:34px 32px;display:flex;flex-direction:column;gap:26px;align-items:flex-start;min-width:0;}
-.project-showcase-logo{width:100%;cursor:pointer;transition:opacity .2s;}
-.project-showcase-logo:hover{opacity:.85;}
+.project-showcase-logo{width:100%;}
 .project-showcase-block{width:100%;}
 .project-showcase-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px;}
 .project-showcase .sol-list{margin:0;}
@@ -275,7 +275,6 @@ nav{
   box-shadow:0 10px 30px -12px #00000066;
   transition:opacity .2s;
 }
-.sol-real-img:hover{opacity:0.9;}
 
 .logo-intro{padding-bottom:20px;}
 .logo-intro p{font-size:17px;color:var(--ink-soft);line-height:1.75;margin-bottom:14px;}
@@ -303,7 +302,6 @@ nav{
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   min-width:0;
 }
 .logo-card:hover{border-color:#d9c4ff55;background:#d9c4ff0d;transform:translateY(-2px);}
@@ -316,8 +314,88 @@ nav{
   object-fit: contain;
 }
 
-/* Clickable / expandable images */
-.lightbox-trigger{cursor:pointer;}
+/* All images across the site are non-interactive: no click-to-expand,
+   no drag, no easy right-click save. See the global image-protection
+   script at the bottom of the page. */
+img{
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-user-drag:none;
+  user-drag:none;
+  pointer-events:none;
+}
+/* re-enable pointer events only where a real link/button needs to be
+   clickable through/around an image (e.g. logos inside nav-less links) */
+a img, button img{pointer-events:none;}
+
+.carousel-case{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:32px;
+  margin-bottom:20px;
+}
+.carousel-case:last-child{margin-bottom:0;}
+.carousel-case-header{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:16px;}
+.carousel-case-title{font-family:'Playfair Display',serif;font-style:italic;font-size:22px;color:#fff;}
+.carousel-case-eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);}
+.carousel-case-desc{font-size:16px;color:var(--ink-soft);line-height:1.75;margin-bottom:20px;}
+.carousel-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:8px;}
+.carousel-strip-placeholder{
+  aspect-ratio:1/1;
+  border-radius:10px;
+  border:1px dashed var(--lav-border);
+  background:#15101f4d;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:14px;
+  font-family:'DM Mono',monospace;
+  font-size:11.5px;
+  color:var(--ink-faint);
+  line-height:1.5;
+}
+.carousel-strip img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  border-radius:10px;
+  border:1px solid var(--line);
+}
+.carousel-case.link-only .carousel-strip{grid-template-columns:1fr;}
+.carousel-case.link-only .carousel-strip-placeholder{aspect-ratio:auto;padding:26px;}
+@media (max-width:600px){.carousel-strip{grid-template-columns:repeat(3,1fr);}}
+
+/* Collective case — logo + text side by side */
+.carousel-case-body{
+  display:grid;
+  grid-template-columns:180px 1fr;
+  gap:28px;
+  align-items:center;
+  margin-bottom:20px;
+}
+.carousel-case-logo{
+  width:100%;
+  aspect-ratio:1/1;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:#15101f4d;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+}
+.carousel-case-logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+.carousel-case-body .carousel-case-desc{margin-bottom:0;}
+@media (max-width:600px){
+  .carousel-case-body{grid-template-columns:1fr;gap:18px;}
+  .carousel-case-logo{max-width:160px;margin:0 auto;}
+}
 
 /* EXPERIENCE */
 .timeline{display:flex;flex-direction:column;gap:12px;}
@@ -353,6 +431,14 @@ nav{
 
 /* EDUCATION */
 .edu-list{display:flex;flex-direction:column;gap:20px;}
+.edu-bottom-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  align-items:stretch;
+  margin-top:20px;
+}
+.edu-bottom-grid .edu-card{height:100%;}
 .edu-card{
   display:flex;
   align-items:center;
@@ -401,10 +487,48 @@ nav{
 }
 .edu-honor-title{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:700;color:#fff;}
 .edu-honor-sub{font-family:'DM Mono',monospace;font-size:12.5px;color:var(--accent-bright);margin-top:3px;}
+
+/* Compact languages box, sits next to education list */
+.lang-box{
+  background:#332a4ecc;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:24px 26px;
+}
+.lang-box-title{
+  font-family:'DM Sans',sans-serif;
+  font-size:15px;
+  font-weight:700;
+  color:#fff;
+  margin-bottom:14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.lang-box-title-icon{
+  flex-shrink:0;width:30px;height:30px;border-radius:8px;
+  background:#d9c4ff1a;color:var(--accent-bright);
+  display:flex;align-items:center;justify-content:center;
+}
+.lang-box-title-icon svg{width:15px;height:15px;}
+.lang-pills{display:flex;flex-wrap:wrap;gap:8px;}
+.lang-pill{
+  display:inline-flex;
+  align-items:baseline;
+  gap:6px;
+  border:1px solid #d9c4ff3d;
+  background:#d9c4ff0d;
+  padding:6px 12px;
+  border-radius:100px;
+  font-size:12.5px;
+}
+.lang-pill-name{color:var(--ink-soft);font-weight:600;}
+.lang-pill-level{font-family:'DM Mono',monospace;font-size:10.5px;color:var(--ink-faint);}
 @media (max-width:760px){
   .edu-card{padding:22px;}
   .edu-card-main{min-width:0;width:100%;}
   .edu-honor{width:100%;justify-content:center;}
+  .edu-bottom-grid{grid-template-columns:1fr;}
 }
 
 
@@ -460,12 +584,6 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
 .reveal{opacity:0;transform:translateY(18px);transition:0.7s ease-out;}
 .reveal.visible{opacity:1;transform:none;}
 
-/* LIGHTBOX */
-#lightbox{display:none;position:fixed;inset:0;z-index:999;background:#15101ff7;align-items:center;justify-content:center;padding:20px;}
-#lightbox.open{display:flex;}
-#lightbox img{max-width:88vw;max-height:80vh;border-radius:8px;border:1px solid var(--line);}
-#lightbox-close{position:fixed;top:22px;right:24px;font-size:36px;color:#fff;cursor:pointer;line-height:1;background:none;border:none;}
-
 /* ── RESPONSIVE ── */
 @media (max-width:860px){
   .nav-links{
@@ -504,6 +622,7 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   .edu-card{flex-direction:column;align-items:stretch;}
   .exp-header-left{flex-basis:100%;min-width:0;}
   .exp-date{margin-left:56px;}
+  .carousel-strip{grid-template-columns:repeat(3,1fr);}
 }
 @media (max-width:480px){
   .logo-grid{grid-template-columns:repeat(2,1fr);}
@@ -528,11 +647,6 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
 
 <canvas id="canvas-bg"></canvas>
 
-<div id="lightbox">
-  <button id="lightbox-close" aria-label="Close enlarged image">&times;</button>
-  <img id="lightbox-img" src="" alt="Enlarged logo">
-</div>
-
 <!-- NAVIGATION -->
 <nav>
   <div class="nav-inner">
@@ -540,6 +654,7 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
     <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">&#9776;</button>
     <ul class="nav-links" id="navLinks">
       <li><a href="#design-work">Design Work</a></li>
+      <li><a href="#carousels">Carousels</a></li>
       <li><a href="#activism">Activism</a></li>
       <li><a href="#logos">Logo Design</a></li>
       <li><a href="#experience">Experience</a></li>
@@ -594,11 +709,11 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
               <div class="project-showcase-main">
                 <h2 class="project-showcase-title">Haneen Sabbah</h2>
                 <div class="project-showcase-eyebrow">Digital Community Platform</div>
-                <p class="project-desc">A custom visual experience built for Haneen's community. This project features a bespoke logo identity transformed from the client's original hand-drawn sketches, bridging the gap between personal artistry and a professional digital presence.</p>
+                <p class="project-desc">A custom visual experience built for Haneen's community. This project features a bespoke logo identity, developed from a hand-drawn sketch Haneen created herself and wanted incorporated into the final mark, bridging the gap between personal artistry and a professional digital presence.</p>
                 <a href="https://haneensabbah.com" target="_blank" rel="noopener noreferrer" class="live-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View Live Site</a>
               </div>
               <div class="project-showcase-side">
-                <img src="https://i.postimg.cc/g0Rn0YbN/Haneen-Logo-(7).png" alt="Haneen Sabbah Logo" class="project-showcase-logo lightbox-trigger">
+                <img src="https://i.postimg.cc/g0Rn0YbN/Haneen-Logo-(7).png" alt="Haneen Sabbah Logo" class="project-showcase-logo">
                 <div class="project-showcase-block">
                   <div class="project-showcase-label">Color Palette</div>
                   <div class="swatches">
@@ -633,12 +748,12 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
         <div class="carousel-slide" data-duration="12000">
           <div class="project-card">
             <div class="project-img-duo">
-              <img src="https://i.postimg.cc/pd6F9QF6/10.png" alt="Montseira Earth Creations product design" class="lightbox-trigger" loading="lazy" decoding="async">
-              <img src="https://i.postimg.cc/rsxTGTYS/montseira-flyer.png" alt="Montseira Earth Creations store flyer" class="lightbox-trigger" loading="lazy" decoding="async">
+              <img src="https://i.postimg.cc/pd6F9QF6/10.png" alt="Montseira Earth Creations product design" loading="lazy" decoding="async" class="contain-img">
+              <img src="https://i.postimg.cc/rsxTGTYS/montseira-flyer.png" alt="Montseira Earth Creations store flyer" loading="lazy" decoding="async">
             </div>
             <div class="project-img-desc">
               <div class="project-img-title">Montseira &middot; Earth Creations</div>
-              <p>Complete visual identity for a botanical wellness brand: new logo, multilingual printable posters and packaging. Helped this small business build recognition and spread the word in the local community.</p>
+              <p>To celebrate the launch of Montseira’s physical store, I designed a brand identity and a bilingual (EN/PT) promotional flyer. My goal was to drive local foot traffic through a cohesive visual style and clear, accessible print materials.</p>
             </div>
           </div>
         </div>
@@ -652,16 +767,79 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   </div>
 </div>
 
-<!-- 02 ACTIVISM -->
-<div class="section-banner lav" id="activism">
+<!-- 02 CAROUSEL DESIGN (expandable) -->
+<div class="section-banner lav" id="carousels">
   <div class="banner-inner">
     <span class="banner-num">02</span>
+    <span class="banner-title">Carousel Design</span>
+    <span class="banner-sub">Social Media &amp; Campaign Carousels</span>
+  </div>
+</div>
+<div class="wrap-lav">
+  <div class="section reveal">
+      <div class="carousel-outer">
+        <div class="carousel-track" id="caroTrack">
+
+          <!-- Slide 1: Haneen Sabbah — Wild & Holy workshop carousel -->
+          <div class="carousel-slide active" data-duration="20000">
+            <div class="carousel-case">
+              <div class="carousel-case-header">
+                <div>
+                  <div class="carousel-case-eyebrow">Instagram Carousel</div>
+                  <div class="carousel-case-title">Wild &amp; Holy &middot; Haneen Sabbah</div>
+                </div>
+              </div>
+              <p class="carousel-case-desc">Designed the promo carousel for Haneen's "Wild &amp; Holy" writing workshop &mdash; a session exploring grief, joy, and paradox through poetry and guided writing. The brief called for a soft, editorial tone that matched the emotional register of the workshop itself, using a botanical motif and gentle type hierarchy to carry a long-form description across multiple slides without losing the reader.</p>
+              <div class="carousel-strip">
+                <img src="https://i.postimg.cc/d3KD7n9n/1.png" alt="Wild &amp; Holy workshop carousel slide 1">
+                <img src="https://i.postimg.cc/Vvc5S4Ft/2.png" alt="Wild &amp; Holy workshop carousel slide 2">
+                <img src="https://i.postimg.cc/76zfYjSX/3.png" alt="Wild &amp; Holy workshop carousel slide 3">
+              </div>
+              <a href="https://www.instagram.com/haneen.sabbah/" target="_blank" rel="noopener noreferrer" class="live-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View on Instagram</a>
+            </div>
+          </div>
+
+          <!-- Slide 2: Inactive Palestinian awareness collective -->
+          <div class="carousel-slide" data-duration="20000">
+            <div class="carousel-case link-only">
+              <div class="carousel-case-header">
+                <div>
+                  <div class="carousel-case-eyebrow">Instagram Carousels</div>
+                  <div class="carousel-case-title">Palestinian Awareness Collective</div>
+                </div>
+              </div>
+              <div class="carousel-case-body">
+                <div class="carousel-case-logo">
+                  <img src="https://i.postimg.cc/g2BVwFLM/412078270-1494216507819222-1414522417288718901-n-modified.png" alt="Palestinian Awareness Collective logo" loading="lazy" decoding="async">
+                </div>
+                <p class="carousel-case-desc">Carousel design work created as a volunteer designer for a Palestinian awareness collective, producing educational content on the cause &mdash; including boycott guidance and campaign explainers &mdash; for a community audience.</p>
+              </div>
+              <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="https://www.instagram.com/p/C1EyhTUMw_s/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener noreferrer" class="live-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View Carousel 1</a>
+                <a href="https://www.instagram.com/p/C1MiUaNo5Lu/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener noreferrer" class="live-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View Carousel 2</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="carousel-indicators">
+        <button class="carousel-dot active" data-carousel="caro" data-index="0" aria-label="Show slide 1"></button>
+        <button class="carousel-dot" data-carousel="caro" data-index="1" aria-label="Show slide 2"></button>
+      </div>
+  </div>
+</div>
+
+<!-- 03 ACTIVISM -->
+<div class="section-banner dark" id="activism">
+  <div class="banner-inner">
+    <span class="banner-num">03</span>
     <span class="banner-title">Solidarity &amp; Activism</span>
     <span class="banner-sub">Visual Communication as Resistance</span>
   </div>
 </div>
 
-<div class="wrap-lav">
+<div class="wrap-dark">
   <div class="section reveal">
     <div class="carousel-outer">
       <div class="carousel-track" id="solTrack">
@@ -680,7 +858,7 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
                 </ul>
               </div>
               <div class="sol-card-media">
-                <img src="https://i.postimg.cc/W3QjJzSJ/palestina-pt-logo.png" alt="Palestina em Português logo and identity" class="sol-real-img lightbox-trigger" loading="lazy" decoding="async">
+                <img src="https://i.postimg.cc/W3QjJzSJ/palestina-pt-logo.png" alt="Palestina em Português logo and identity" class="sol-real-img" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: contain;">
               </div>
             </div>
           </div>
@@ -700,7 +878,7 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
                 </ul>
               </div>
               <div class="sol-card-media">
-                <img src="https://i.postimg.cc/G2qh591G/Flyers-design.png" alt="Bilingual awareness campaign flyer design" class="sol-real-img lightbox-trigger" loading="lazy" decoding="async">
+                <img src="https://i.postimg.cc/G2qh591G/Flyers-design.png" alt="Bilingual awareness campaign flyer design" class="sol-real-img" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: contain;">
               </div>
             </div>
           </div>
@@ -720,7 +898,7 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
                 </ul>
               </div>
               <div class="sol-card-media">
-                <img src="https://i.postimg.cc/hjX0XRvn/protest.jpg" alt="Protest and community organizing" class="sol-real-img lightbox-trigger" loading="lazy" decoding="async">
+                <img src="https://i.postimg.cc/hjX0XRvn/protest.jpg" alt="Protest and community organizing" class="sol-real-img" loading="lazy" decoding="async" >
               </div>
             </div>
           </div>
@@ -737,15 +915,15 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
 </div>
 
 <!-- LOGO DESIGN -->
-<div class="section-banner dark" id="logos">
+<div class="section-banner lav" id="logos">
   <div class="banner-inner">
-    <span class="banner-num">03</span>
+    <span class="banner-num">04</span>
     <span class="banner-title">Logo Design</span>
     <span class="banner-sub">Brand Concepts &amp; Visual Identity</span>
   </div>
 </div>
 
-<div class="wrap-dark">
+<div class="wrap-lav">
   <div class="section reveal">
     <div class="logo-intro">
       <p>Every brand starts with a logo, and every logo starts with a conversation. I&rsquo;ve worked with clients ranging from small independent shops to personal platforms, helping them translate who they are into a mark that speaks before a single word is read. The brief is always the same: it needs to reflect the business concept, capture the direction it&rsquo;s heading, and above all, it needs to feel like the client.</p>
@@ -753,34 +931,34 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
     </div>
     <div class="logo-grid">
       <div class="logo-card">
-        <img src="https://i.postimg.cc/k4Vq4KND/Logo1.png" alt="Logo design concept 1" class="lightbox-trigger" loading="lazy" decoding="async">
+        <img src="https://i.postimg.cc/4NMwrgLF/Logos-(2).png" alt="Logo design concept 1" loading="lazy" decoding="async">
       </div>
       <div class="logo-card">
-        <img src="https://i.postimg.cc/rmdMmxGm/Logo3.png" alt="Logo design concept 2" class="lightbox-trigger" loading="lazy" decoding="async">
+        <img src="https://i.postimg.cc/kXmqd02K/Lawin.png" alt="Logo design concept 2" loading="lazy" decoding="async">
       </div>
       <div class="logo-card">
-        <img src="https://i.postimg.cc/ydwBSxnV/Logo5.png" alt="Logo design concept 3" class="lightbox-trigger" loading="lazy" decoding="async">
+        <img src="https://i.postimg.cc/wxr8q3wg/Eva.png" alt="Logo design concept 3" loading="lazy" decoding="async">
       </div>
       <div class="logo-card">
-        <img src="https://i.postimg.cc/Pfp5rsK1/1.png" alt="Logo design concept 4" class="lightbox-trigger" loading="lazy" decoding="async">
+        <img src="https://i.postimg.cc/Hsp4RL9V/Zaytouna-(1).png" alt="Logo design concept 4" loading="lazy" decoding="async">
       </div>
       <div class="logo-card">
-        <img src="https://i.postimg.cc/W3QjJzSJ/palestina-pt-logo.png" alt="Palestina em Português logo mark" class="lightbox-trigger" loading="lazy" decoding="async">
+        <img src="https://i.postimg.cc/mrSY2fjG/Era-Salon.png" alt="Logo design concept 5" loading="lazy" decoding="async">
       </div>
     </div>
   </div>
 </div>
 
-<!-- 03 EXPERIENCE -->
-<div class="section-banner lav" id="experience">
+<!-- 05 EXPERIENCE -->
+<div class="section-banner dark" id="experience">
   <div class="banner-inner">
-    <span class="banner-num">04</span>
+    <span class="banner-num">05</span>
     <span class="banner-title">Management Experience</span>
     <span class="banner-sub">Leadership &amp; Team Direction</span>
   </div>
 </div>
 
-<div class="wrap-lav">
+<div class="wrap-dark">
   <div class="section reveal">
     <div class="timeline">
 
@@ -865,16 +1043,16 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   </div>
 </div>
 
-<!-- 05 EDUCATION -->
-<div class="section-banner dark" id="education">
+<!-- 06 EDUCATION -->
+<div class="section-banner lav" id="education">
   <div class="banner-inner">
-    <span class="banner-num">05</span>
+    <span class="banner-num">06</span>
     <span class="banner-title">Education</span>
     <span class="banner-sub">Academic Background</span>
   </div>
 </div>
 
-<div class="wrap-dark">
+<div class="wrap-lav">
   <div class="section reveal">
     <div class="edu-list">
       <div class="edu-card">
@@ -901,16 +1079,32 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
         </div>
       </div>
 
-      <div class="edu-card edu-card-cert">
-        <div class="edu-card-main">
-          <div class="edu-header">
-            <img class="edu-logo" width="48" height="48" src="https://www.google.com/s2/favicons?sz=128&domain=//ilifecoachtraining.com/" alt="Life Coach Training Institute logo" loading="lazy" onerror="this.remove()">
-            <div>
-              <div class="edu-school">Life Coach Training Institute</div>
-              <div class="edu-degree">Life Coach Certification Course</div>
+      <div class="edu-bottom-grid">
+        <div class="edu-card edu-card-cert">
+          <div class="edu-card-main">
+            <div class="edu-header">
+              <img class="edu-logo" width="48" height="48" src="https://www.google.com/s2/favicons?sz=128&domain=//ilifecoachtraining.com/" alt="Life Coach Training Institute logo" loading="lazy" onerror="this.remove()">
+              <div>
+                <div class="edu-school">Life Coach Training Institute</div>
+                <div class="edu-degree">Life Coach Certification Course</div>
+              </div>
             </div>
+            <p class="edu-description">Completed training in personal development, emotional intelligence, and goal-setting.</p>
           </div>
-          <p class="edu-description">Completed training in personal development, emotional intelligence, and goal-setting.</p>
+        </div>
+
+        <div class="lang-box" id="languages">
+          <div class="lang-box-title">
+            <span class="lang-box-title-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 6 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-6-3.8-9S9.5 5.7 12 3z"/></svg></span>
+            Languages
+          </div>
+          <div class="lang-pills">
+            <span class="lang-pill"><span class="lang-pill-name">Arabic</span><span class="lang-pill-level">Native</span></span>
+            <span class="lang-pill"><span class="lang-pill-name">English</span><span class="lang-pill-level">Fluent</span></span>
+            <span class="lang-pill"><span class="lang-pill-name">Turkish</span><span class="lang-pill-level">Conversational</span></span>
+            <span class="lang-pill"><span class="lang-pill-name">Portuguese</span><span class="lang-pill-level">Beginner</span></span>
+            <span class="lang-pill"><span class="lang-pill-name">Spanish</span><span class="lang-pill-level">Beginner</span></span>
+          </div>
         </div>
       </div>
     </div>
@@ -1003,9 +1197,6 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
 
   // Generic carousel — indicators live outside the height-limited/clipped outer
   // div, so they stay visible and clickable no matter which slide is active.
-  // Autoplay is stopped for good once the visitor interacts with something
-  // inside the slide (opens a lightbox image or plays the video), so it
-  // doesn't yank them away to the next slide mid-view.
   function initCarousel(trackId, carouselKey){
     var track = document.getElementById(trackId);
     if(!track) return null;
@@ -1046,37 +1237,14 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
       if(!img.complete){ img.addEventListener('load', setHeight); }
     });
 
-    // Stop cycling as soon as the visitor opens a lightbox image inside this carousel
-    track.querySelectorAll('.lightbox-trigger').forEach(function(img){
-      img.addEventListener('click', stopAutoplay);
-    });
-
     go(0);
 
-    return { stop: stopAutoplay };
+    return { stop: stopAutoplay, refresh: setHeight };
   }
 
   var designCarousel = initCarousel('designTrack','design');
   var solCarousel = initCarousel('solTrack','sol');
-
-  // Lightbox — every flyer, logo, and project photo tagged with
-  // .lightbox-trigger opens the enlarged view on click.
-  document.querySelectorAll('.lightbox-trigger').forEach(function(img){
-    img.addEventListener('click', function(){
-      document.getElementById('lightbox-img').src = img.src;
-      document.getElementById('lightbox-img').alt = img.alt;
-      document.getElementById('lightbox').classList.add('open');
-    });
-  });
-  document.getElementById('lightbox-close').addEventListener('click', function(){
-    document.getElementById('lightbox').classList.remove('open');
-  });
-  document.getElementById('lightbox').addEventListener('click', function(e){
-    if(e.target === this) this.classList.remove('open');
-  });
-  document.addEventListener('keydown', function(e){
-    if(e.key === 'Escape') document.getElementById('lightbox').classList.remove('open');
-  });
+  var caroCarousel = initCarousel('caroTrack','caro');
 
   // Click-to-play YouTube facade — avoids loading the embed (and YouTube's scripts)
   // until the visitor actually wants to watch, which keeps initial page load fast.
@@ -1095,6 +1263,15 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
       videoWrap.appendChild(iframe);
     }, { once:true });
   }
+
+  // Global image protection: block right-click context menu and drag-start
+  // on every image site-wide, on top of the CSS user-select/drag lockout.
+  document.addEventListener('contextmenu', function(e){
+    if(e.target && e.target.tagName === 'IMG'){ e.preventDefault(); }
+  });
+  document.addEventListener('dragstart', function(e){
+    if(e.target && e.target.tagName === 'IMG'){ e.preventDefault(); }
+  });
 
   // Canvas background
   var canvas = document.getElementById('canvas-bg');
