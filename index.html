@@ -228,7 +228,7 @@ nav{
 .project-showcase-title{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:clamp(26px,3vw,36px);color:#fff;margin-bottom:8px;}
 .project-showcase-eyebrow{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;}
 .project-showcase-side{background:#15101f4d;border-left:1px solid var(--line);padding:34px 32px;display:flex;flex-direction:column;gap:26px;align-items:flex-start;min-width:0;}
-.project-showcase-logo{width:100%;}
+.project-showcase-logo{width:100%;border-radius:12px;overflow:hidden;}
 .project-showcase-block{width:100%;}
 .project-showcase-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px;}
 .project-showcase .sol-list{margin:0;}
@@ -327,6 +327,48 @@ img{
 /* re-enable pointer events only where a real link/button needs to be
    clickable through/around an image (e.g. logos inside nav-less links) */
 a img, button img{pointer-events:none;}
+
+/* Clickable logos / logo-design concepts open an enlarged lightbox view.
+   These are the only images on the site that re-enable pointer events. */
+.project-showcase-logo,
+.project-img-duo img,
+.logo-card img,
+.carousel-strip img,
+.carousel-case-logo img{
+  pointer-events:auto;
+  cursor:zoom-in;
+}
+
+/* LIGHTBOX */
+.lightbox-overlay{
+  position:fixed;inset:0;z-index:1000;
+  background:#100c19ee;
+  display:none;
+  align-items:center;justify-content:center;
+  padding:40px;
+  cursor:zoom-out;
+}
+.lightbox-overlay.open{display:flex;}
+.lightbox-img{
+  max-width:90vw;max-height:90vh;
+  object-fit:contain;
+  border-radius:12px;
+  box-shadow:0 20px 60px -20px #000000cc;
+  pointer-events:none;
+  user-select:none;
+  background:#15101f;
+}
+.lightbox-close{
+  position:absolute;top:20px;right:20px;
+  width:44px;height:44px;border-radius:50%;
+  background:#ffffff14;border:1px solid #ffffff33;
+  color:#fff;font-size:24px;line-height:1;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  pointer-events:auto;
+  transition:background .2s,transform .2s;
+}
+.lightbox-close:hover{background:#ffffff26;transform:scale(1.06);}
 
 .carousel-case{
   background:var(--bg-card);
@@ -540,9 +582,23 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   grid-template-columns:1fr 1fr;
   gap:48px;align-items:start;
 }
-.footer-left{min-width:0;}
-.footer-left h2{font-size:clamp(28px,3.6vw,46px);margin-bottom:14px;line-height:1.2;}
-.footer-left p{font-size:17px;color:var(--ink-soft);line-height:1.8;max-width:400px;}
+.footer-left{min-width:0;display:flex;gap:26px;align-items:center;}
+.footer-photo{
+  flex-shrink:0;
+  width:150px;height:150px;
+  border-radius:16px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  box-shadow:0 12px 30px -14px #00000077;
+}
+.footer-photo img{width:100%;height:100%;object-fit:cover;pointer-events:none;}
+.footer-left-text{min-width:0;}
+.footer-left h2{font-size:clamp(26px,3.2vw,40px);margin-bottom:10px;line-height:1.18;}
+.footer-left p{font-size:15.5px;color:var(--ink-soft);line-height:1.6;max-width:320px;}
+@media (max-width:520px){
+  .footer-left{flex-direction:column;align-items:flex-start;gap:18px;}
+  .footer-photo{width:120px;height:120px;}
+}
 .footer-right{display:flex;flex-direction:column;gap:10px;padding-top:6px;align-items:stretch;width:100%;min-width:0;}
 .footer-contact-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:5px;}
 .footer-links{display:flex;flex-direction:column;gap:10px;list-style:none;width:100%;padding:0;margin:0;}
@@ -1115,8 +1171,13 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
 <footer id="contact" class="reveal">
   <div class="footer-inner">
     <div class="footer-left">
-      <h2>Let&rsquo;s work <em>together</em></h2>
-      <p>Thank you for checking out my work. I am currently open to new opportunities and would love to connect &mdash; whether it&rsquo;s a brand identity project, a web design collaboration, or a full-time creative role.</p>
+      <div class="footer-photo">
+        <img src="https://i.postimg.cc/V5ysDFSf/office-pic.jpg" alt="Sarah Kuhail">
+      </div>
+      <div class="footer-left-text">
+        <h2>Let&rsquo;s work <em>together</em></h2>
+        <p>Open to remote opportunities &mdash; brand identity, web design, or creative roles.</p>
+      </div>
     </div>
     <div class="footer-right">
       <div class="footer-contact-label">Get in touch</div>
@@ -1147,6 +1208,12 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
     <div class="footer-avail">Open to opportunities &middot; Remote &mdash; Europe</div>
   </div>
 </footer>
+
+<!-- LIGHTBOX (used for logos & logo-design concept tiles) -->
+<div class="lightbox-overlay" id="lightboxOverlay" role="dialog" aria-modal="true" aria-label="Enlarged image view">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close enlarged image">&times;</button>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="">
+</div>
 
 <script>
 (function(){
@@ -1271,6 +1338,41 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   });
   document.addEventListener('dragstart', function(e){
     if(e.target && e.target.tagName === 'IMG'){ e.preventDefault(); }
+  });
+
+  // Lightbox: click-to-enlarge for the Haneen logo, the Montseira images,
+  // every logo design concept tile, the Wild & Holy carousel slides, and
+  // the collective logo. These are the only images with pointer events
+  // re-enabled (see CSS), everything else stays locked down.
+  var lightboxOverlay = document.getElementById('lightboxOverlay');
+  var lightboxImg = document.getElementById('lightboxImg');
+  var lightboxClose = document.getElementById('lightboxClose');
+
+  function openLightbox(src, alt){
+    lightboxImg.src = src;
+    lightboxImg.alt = alt || '';
+    lightboxOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox(){
+    lightboxOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+    lightboxImg.src = '';
+  }
+
+  document.querySelectorAll('.project-showcase-logo, .project-img-duo img, .logo-card img, .carousel-strip img, .carousel-case-logo img').forEach(function(img){
+    img.addEventListener('click', function(){
+      openLightbox(img.currentSrc || img.src, img.alt);
+    });
+  });
+
+  lightboxOverlay.addEventListener('click', closeLightbox);
+  lightboxClose.addEventListener('click', function(e){
+    e.stopPropagation();
+    closeLightbox();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeLightbox();
   });
 
   // Canvas background
