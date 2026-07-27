@@ -332,9 +332,7 @@ a img, button img{pointer-events:none;}
    These are the only images on the site that re-enable pointer events. */
 .project-showcase-logo,
 .project-img-duo img,
-.logo-card img,
-.carousel-strip img,
-.carousel-case-logo img{
+.logo-card img {
   pointer-events:auto;
   cursor:zoom-in;
 }
@@ -369,75 +367,6 @@ a img, button img{pointer-events:none;}
   transition:background .2s,transform .2s;
 }
 .lightbox-close:hover{background:#ffffff26;transform:scale(1.06);}
-
-.carousel-case{
-  background:var(--bg-card);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:32px;
-  margin-bottom:20px;
-}
-.carousel-case:last-child{margin-bottom:0;}
-.carousel-case-header{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:16px;}
-.carousel-case-title{font-family:'Playfair Display',serif;font-style:italic;font-size:22px;color:#fff;}
-.carousel-case-eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);}
-.carousel-case-desc{font-size:16px;color:var(--ink-soft);line-height:1.75;margin-bottom:20px;}
-.carousel-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:8px;}
-.carousel-strip-placeholder{
-  aspect-ratio:1/1;
-  border-radius:10px;
-  border:1px dashed var(--lav-border);
-  background:#15101f4d;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:14px;
-  font-family:'DM Mono',monospace;
-  font-size:11.5px;
-  color:var(--ink-faint);
-  line-height:1.5;
-}
-.carousel-strip img{
-  width:100%;
-  aspect-ratio:1/1;
-  object-fit:cover;
-  border-radius:10px;
-  border:1px solid var(--line);
-}
-.carousel-case.link-only .carousel-strip{grid-template-columns:1fr;}
-.carousel-case.link-only .carousel-strip-placeholder{aspect-ratio:auto;padding:26px;}
-@media (max-width:600px){.carousel-strip{grid-template-columns:repeat(3,1fr);}}
-
-/* Collective case — logo + text side by side */
-.carousel-case-body{
-  display:grid;
-  grid-template-columns:180px 1fr;
-  gap:28px;
-  align-items:center;
-  margin-bottom:20px;
-}
-.carousel-case-logo{
-  width:100%;
-  aspect-ratio:1/1;
-  border-radius:14px;
-  border:1px solid var(--line);
-  background:#15101f4d;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:16px;
-}
-.carousel-case-logo img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-}
-.carousel-case-body .carousel-case-desc{margin-bottom:0;}
-@media (max-width:600px){
-  .carousel-case-body{grid-template-columns:1fr;gap:18px;}
-  .carousel-case-logo{max-width:160px;margin:0 auto;}
-}
 
 /* EXPERIENCE */
 .timeline{display:flex;flex-direction:column;gap:12px;}
@@ -678,7 +607,6 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   .edu-card{flex-direction:column;align-items:stretch;}
   .exp-header-left{flex-basis:100%;min-width:0;}
   .exp-date{margin-left:56px;}
-  .carousel-strip{grid-template-columns:repeat(3,1fr);}
 }
 @media (max-width:480px){
   .logo-grid{grid-template-columns:repeat(2,1fr);}
@@ -710,7 +638,6 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
     <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">&#9776;</button>
     <ul class="nav-links" id="navLinks">
       <li><a href="#design-work">Design Work</a></li>
-      <li><a href="#carousels">Carousels</a></li>
       <li><a href="#activism">Activism</a></li>
       <li><a href="#logos">Logo Design</a></li>
       <li><a href="#experience">Experience</a></li>
@@ -823,30 +750,16 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   </div>
 </div>
 
-<!-- 02 CAROUSEL DESIGN (expandable) -->
-<div class="section-banner lav" id="carousels">
+<!-- 02 ACTIVISM -->
+<div class="section-banner lav" id="activism">
   <div class="banner-inner">
     <span class="banner-num">02</span>
-    <span class="banner-title">Carousel Design</span>
-    <span class="banner-sub">Social Media &amp; Campaign Carousels</span>
-  </div>
-</div>
-<div class="wrap-lav">
-  <div class="section reveal">
-      <div class="carousel-outer">
-        <div class="carousel-track" id="caroTrack">
-
-
-<!-- 03 ACTIVISM -->
-<div class="section-banner dark" id="activism">
-  <div class="banner-inner">
-    <span class="banner-num">03</span>
     <span class="banner-title">Solidarity &amp; Activism</span>
     <span class="banner-sub">Visual Communication as Resistance</span>
   </div>
 </div>
 
-<div class="wrap-dark">
+<div class="wrap-lav">
   <div class="section reveal">
     <div class="carousel-outer">
       <div class="carousel-track" id="solTrack">
@@ -921,16 +834,16 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   </div>
 </div>
 
-<!-- LOGO DESIGN -->
-<div class="section-banner lav" id="logos">
+<!-- 03 LOGO DESIGN -->
+<div class="section-banner dark" id="logos">
   <div class="banner-inner">
-    <span class="banner-num">04</span>
+    <span class="banner-num">03</span>
     <span class="banner-title">Logo Design</span>
     <span class="banner-sub">Brand Concepts &amp; Visual Identity</span>
   </div>
 </div>
 
-<div class="wrap-lav">
+<div class="wrap-dark">
   <div class="section reveal">
     <div class="logo-intro">
       <p>Every brand starts with a logo, and every logo starts with a conversation. I&rsquo;ve worked with clients ranging from small independent shops to personal platforms, helping them translate who they are into a mark that speaks before a single word is read. The brief is always the same: it needs to reflect the business concept, capture the direction it&rsquo;s heading, and above all, it needs to feel like the client.</p>
@@ -956,16 +869,16 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   </div>
 </div>
 
-<!-- 05 EXPERIENCE -->
-<div class="section-banner dark" id="experience">
+<!-- 04 EXPERIENCE -->
+<div class="section-banner lav" id="experience">
   <div class="banner-inner">
-    <span class="banner-num">05</span>
+    <span class="banner-num">04</span>
     <span class="banner-title">Management Experience</span>
     <span class="banner-sub">Leadership &amp; Team Direction</span>
   </div>
 </div>
 
-<div class="wrap-dark">
+<div class="wrap-lav">
   <div class="section reveal">
     <div class="timeline">
 
@@ -1050,16 +963,16 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   </div>
 </div>
 
-<!-- 06 EDUCATION -->
-<div class="section-banner lav" id="education">
+<!-- 05 EDUCATION -->
+<div class="section-banner dark" id="education">
   <div class="banner-inner">
-    <span class="banner-num">06</span>
+    <span class="banner-num">05</span>
     <span class="banner-title">Education</span>
     <span class="banner-sub">Academic Background</span>
   </div>
 </div>
 
-<div class="wrap-lav">
+<div class="wrap-dark">
   <div class="section reveal">
     <div class="edu-list">
       <div class="edu-card">
@@ -1268,7 +1181,6 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
 
   var designCarousel = initCarousel('designTrack','design');
   var solCarousel = initCarousel('solTrack','sol');
-  var caroCarousel = initCarousel('caroTrack','caro');
 
   // Click-to-play YouTube facade — avoids loading the embed (and YouTube's scripts)
   // until the visitor actually wants to watch, which keeps initial page load fast.
@@ -1298,9 +1210,7 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   });
 
   // Lightbox: click-to-enlarge for the Haneen logo, the Montseira images,
-  // every logo design concept tile, the Wild & Holy carousel slides, and
-  // the collective logo. These are the only images with pointer events
-  // re-enabled (see CSS), everything else stays locked down.
+  // and every logo design concept tile.
   var lightboxOverlay = document.getElementById('lightboxOverlay');
   var lightboxImg = document.getElementById('lightboxImg');
   var lightboxClose = document.getElementById('lightboxClose');
@@ -1317,7 +1227,7 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
     lightboxImg.src = '';
   }
 
-  document.querySelectorAll('.project-showcase-logo, .project-img-duo img, .logo-card img, .carousel-strip img, .carousel-case-logo img').forEach(function(img){
+  document.querySelectorAll('.project-showcase-logo, .project-img-duo img, .logo-card img').forEach(function(img){
     img.addEventListener('click', function(){
       openLightbox(img.currentSrc || img.src, img.alt);
     });
