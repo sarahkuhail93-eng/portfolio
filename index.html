@@ -1,3 +1,4 @@
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -32,6 +33,7 @@
   --lav-border:    #5a4a8080;
   --lav-card:      #3d2f5ecc;
 }
+
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;overflow-x:hidden;background:var(--bg);width:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
@@ -145,11 +147,23 @@ nav{
 .wrap-lav{background:var(--bg-lav);}
 .section{max-width:1160px;margin:0 auto;padding:40px 24px;width:100%;}
 
-/* STACKED LIST LAYOUT (WITHOUT CAROUSEL) */
-.cards-stack{display:flex;flex-direction:column;gap:32px;width:100%;}
+/* CAROUSEL — dots live OUTSIDE the clipped/height-limited outer, so they're
+   never cut off and stay clickable regardless of slide height */
+.carousel-outer{position:relative;overflow:hidden;transition:height .4s ease;border-radius:18px;}
+.carousel-track{
+  display:flex;
+  align-items:flex-start;
+  transition:transform 0.7s cubic-bezier(0.25,1,0.5,1);
+}
+.carousel-slide{flex-shrink:0;width:100%;opacity:0;transition:opacity 0.7s ease;min-width:0;}
+.carousel-slide.active{opacity:1;}
+.carousel-indicators{display:flex;justify-content:center;gap:10px;padding:18px 0 4px;}
+.carousel-dot{width:9px;height:9px;border-radius:50%;background:#d9c4ff33;cursor:pointer;transition:background .3s,transform .2s;border:none;}
+.carousel-dot:hover{background:#d9c4ff77;transform:scale(1.15);}
+.carousel-dot.active{background:var(--accent-bright);}
 
 /* PROJECT CARDS */
-.project-card{background:var(--bg-card);border:1px solid var(--line);border-radius:18px;overflow:hidden;width:100%;}
+.project-card{background:var(--bg-card);border:1px solid var(--line);border-radius:18px;overflow:hidden;}
 .project-video{width:100%;aspect-ratio:16/9;border-bottom:1px solid var(--line);background:#000;position:relative;cursor:pointer;}
 .project-video iframe{width:100%;height:100%;border:none;}
 .project-video-facade{position:absolute;inset:0;width:100%;height:100%;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;}
@@ -179,6 +193,7 @@ nav{
 .live-link svg{width:14px;height:14px;flex-shrink:0;}
 .live-link:hover{color:#fff;border-color:#d9c4ff66;background:#d9c4ff26;transform:translateY(-2px);}
 
+/* Image-led project card (e.g. Montseira) */
 .project-full-img{width:100%;aspect-ratio:16/9;object-fit:cover;object-position:center;border-bottom:1px solid var(--line);display:block;background:#15101f;}
 
 .project-img-duo{
@@ -219,9 +234,14 @@ nav{
 .project-showcase-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px;}
 .project-showcase .sol-list{margin:0;}
 .project-showcase .sol-list li{color:var(--ink-soft);font-size:14.5px;}
+@media (max-width:760px){
+  .project-showcase-top{grid-template-columns:1fr;}
+  .project-showcase-side{border-left:none;border-top:1px solid var(--line);}
+}
 
-/* SOLIDARITY CARDS */
-.sol-card{background:var(--lav-card);border:1px solid var(--lav-border);border-radius:16px;padding:30px;width:100%;}
+/* SOLIDARITY CARDS — media + content grid so the photo and text can swap
+   sides from slide to slide (alternating layout) */
+.sol-card{background:var(--lav-card);border:1px solid var(--lav-border);border-radius:16px;padding:30px;height:100%;}
 .sol-card.featured{border-color:#d9c4ff66;background:#3d2f5e99;}
 .sol-card h3{font-family:'DM Sans',sans-serif;font-size:19px;font-weight:700;color:var(--accent);margin-bottom:12px;}
 .sol-card p{font-size:16px;color:var(--ink-soft);line-height:1.7;margin-bottom:16px;}
@@ -237,11 +257,14 @@ nav{
 }
 .sol-card-media{order:2;min-width:0;}
 .sol-card-content{order:1;min-width:0;}
+/* alternates the media to the left / content to the right on flipped slides */
 .sol-card-grid.sol-flip .sol-card-media{order:1;}
 .sol-card-grid.sol-flip .sol-card-content{order:2;}
 .sol-card-content p{margin-bottom:16px;}
 .sol-card-content p:last-of-type{margin-bottom:16px;}
 
+/* Real photos/flyers — fill the frame edge-to-edge like the carousel frame
+   itself (object-fit: cover), no padding or background box behind them. */
 .sol-real-img{
   width:100%;
   aspect-ratio:4/3;
@@ -259,6 +282,9 @@ nav{
 .logo-highlight{font-size:17px;color:var(--ink-soft);line-height:1.8;padding-bottom:24px;}
 .logo-highlight strong{color:var(--accent-bright);}
 
+/* Square tiles (matching the logos themselves) sized with auto-fit so each
+   logo gets real room to breathe instead of being squeezed into a wide,
+   short rectangle */
 .logo-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -289,6 +315,9 @@ nav{
   object-fit: contain;
 }
 
+/* All images across the site are non-interactive: no click-to-expand,
+   no drag, no easy right-click save. See the global image-protection
+   script at the bottom of the page. */
 img{
   -webkit-user-select:none;
   user-select:none;
@@ -296,11 +325,17 @@ img{
   user-drag:none;
   pointer-events:none;
 }
+/* re-enable pointer events only where a real link/button needs to be
+   clickable through/around an image (e.g. logos inside nav-less links) */
 a img, button img{pointer-events:none;}
 
+/* Clickable logos / logo-design concepts open an enlarged lightbox view.
+   These are the only images on the site that re-enable pointer events. */
 .project-showcase-logo,
 .project-img-duo img,
-.logo-card img {
+.logo-card img,
+.carousel-strip img,
+.carousel-case-logo img{
   pointer-events:auto;
   cursor:zoom-in;
 }
@@ -336,10 +371,81 @@ a img, button img{pointer-events:none;}
 }
 .lightbox-close:hover{background:#ffffff26;transform:scale(1.06);}
 
+.carousel-case{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:32px;
+  margin-bottom:20px;
+}
+.carousel-case:last-child{margin-bottom:0;}
+.carousel-case-header{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:16px;}
+.carousel-case-title{font-family:'Playfair Display',serif;font-style:italic;font-size:22px;color:#fff;}
+.carousel-case-eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);}
+.carousel-case-desc{font-size:16px;color:var(--ink-soft);line-height:1.75;margin-bottom:20px;}
+.carousel-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:8px;}
+.carousel-strip-placeholder{
+  aspect-ratio:1/1;
+  border-radius:10px;
+  border:1px dashed var(--lav-border);
+  background:#15101f4d;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:14px;
+  font-family:'DM Mono',monospace;
+  font-size:11.5px;
+  color:var(--ink-faint);
+  line-height:1.5;
+}
+.carousel-strip img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  border-radius:10px;
+  border:1px solid var(--line);
+}
+.carousel-case.link-only .carousel-strip{grid-template-columns:1fr;}
+.carousel-case.link-only .carousel-strip-placeholder{aspect-ratio:auto;padding:26px;}
+@media (max-width:600px){.carousel-strip{grid-template-columns:repeat(3,1fr);}}
+
+/* Collective case — logo + text side by side */
+.carousel-case-body{
+  display:grid;
+  grid-template-columns:180px 1fr;
+  gap:28px;
+  align-items:center;
+  margin-bottom:20px;
+}
+.carousel-case-logo{
+  width:100%;
+  aspect-ratio:1/1;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:#15101f4d;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+}
+.carousel-case-logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+.carousel-case-body .carousel-case-desc{margin-bottom:0;}
+@media (max-width:600px){
+  .carousel-case-body{grid-template-columns:1fr;gap:18px;}
+  .carousel-case-logo{max-width:160px;margin:0 auto;}
+}
+
 /* EXPERIENCE */
 .timeline{display:flex;flex-direction:column;gap:12px;}
 .exp-item{border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:border-color .3s;}
 .exp-item:hover{border-color:var(--lav-border);}
+/* each role gets its own tint instead of one flat near-black block, so the
+   list reads as distinct chapters rather than one long dark slab */
 .exp-item:nth-child(1){background:#3a2d5ecc;}
 .exp-item:nth-child(2){background:#332a4ecc;}
 .exp-item:nth-child(3){background:#2c2542cc;}
@@ -425,6 +531,7 @@ a img, button img{pointer-events:none;}
 .edu-honor-title{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:700;color:#fff;}
 .edu-honor-sub{font-family:'DM Mono',monospace;font-size:12.5px;color:var(--accent-bright);margin-top:3px;}
 
+/* Compact languages box, sits next to education list */
 .lang-box{
   background:#332a4ecc;
   border:1px solid var(--line);
@@ -460,6 +567,13 @@ a img, button img{pointer-events:none;}
 }
 .lang-pill-name{color:var(--ink-soft);font-weight:600;}
 .lang-pill-level{font-family:'DM Mono',monospace;font-size:10.5px;color:var(--ink-faint);}
+@media (max-width:760px){
+  .edu-card{padding:22px;}
+  .edu-card-main{min-width:0;width:100%;}
+  .edu-honor{width:100%;justify-content:center;}
+  .edu-bottom-grid{grid-template-columns:1fr;}
+}
+
 
 /* FOOTER */
 footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:56px 24px 40px;}
@@ -482,7 +596,10 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
 .footer-left-text{min-width:0;}
 .footer-left h2{font-size:clamp(26px,3.2vw,40px);margin-bottom:10px;line-height:1.18;}
 .footer-left p{font-size:15.5px;color:var(--ink-soft);line-height:1.6;max-width:320px;}
-
+@media (max-width:520px){
+  .footer-left{flex-direction:column;align-items:flex-start;gap:18px;}
+  .footer-photo{width:120px;height:120px;}
+}
 .footer-right{display:flex;flex-direction:column;gap:10px;padding-top:6px;align-items:stretch;width:100%;min-width:0;}
 .footer-contact-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:5px;}
 .footer-links{display:flex;flex-direction:column;gap:10px;list-style:none;width:100%;padding:0;margin:0;}
@@ -536,12 +653,13 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   .nav-toggle{display:block;}
   .footer-inner{grid-template-columns:1fr;gap:30px;}
 }
-
 @media (max-width:760px){
   .hero{
     grid-template-columns:1fr;
     gap:24px;padding:28px 18px 22px;
   }
+  /* Reset explicit grid-column placement so the photo doesn't force an
+     implicit second column and squeeze the text back into a two-column look */
   .hero-text{grid-column:1;}
   .hero-photo-col{grid-column:1;width:100%;max-width:280px;margin:0 auto;}
   .hero-bio{max-width:none;}
@@ -561,22 +679,8 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   .edu-card{flex-direction:column;align-items:stretch;}
   .exp-header-left{flex-basis:100%;min-width:0;}
   .exp-date{margin-left:56px;}
-
-  /* Mobile Content Size Optimizations */
-  .project-showcase-top{grid-template-columns:1fr;}
-  .project-showcase-side{border-left:none;border-top:1px solid var(--line);padding:24px 20px;}
-  .project-showcase-main{padding:24px 20px;}
-  .project-img-desc{padding:24px 20px;}
-  .sol-card{padding:24px 20px;}
-  .sol-real-img{aspect-ratio:auto;max-height:300px;object-fit:cover;}
-  .project-video{aspect-ratio:16/9;}
+  .carousel-strip{grid-template-columns:repeat(3,1fr);}
 }
-
-@media (max-width:520px){
-  .footer-left{flex-direction:column;align-items:flex-start;gap:18px;}
-  .footer-photo{width:120px;height:120px;}
-}
-
 @media (max-width:480px){
   .logo-grid{grid-template-columns:repeat(2,1fr);}
   .footer-links a span.footer-handle{display:none;}
@@ -589,12 +693,7 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   .exp-date{font-size:11.5px;}
   .edu-card{padding:18px;}
   .edu-honor{padding:16px 20px;}
-  .project-showcase-main{padding:20px 16px;}
-  .project-showcase-side{padding:20px 16px;}
-  .project-img-desc{padding:20px 16px;}
-  .sol-card{padding:20px 16px;}
 }
-
 @media (prefers-reduced-motion: reduce){
   .reveal{transition:none;opacity:1;transform:none;}
   html{scroll-behavior:auto;}
@@ -612,6 +711,7 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
     <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">&#9776;</button>
     <ul class="nav-links" id="navLinks">
       <li><a href="#design-work">Design Work</a></li>
+      <li><a href="#carousels">Carousels</a></li>
       <li><a href="#activism">Activism</a></li>
       <li><a href="#logos">Logo Design</a></li>
       <li><a href="#experience">Experience</a></li>
@@ -656,143 +756,231 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
 </div>
 <div class="wrap-dark">
   <div class="section reveal">
-    <div class="cards-stack">
+    <div class="carousel-outer">
+      <div class="carousel-track" id="designTrack">
 
-      <!-- Item 1: Haneen Sabbah -->
-      <div class="project-card project-showcase">
-        <div class="project-showcase-top">
-          <div class="project-showcase-main">
-            <h2 class="project-showcase-title">Haneen Sabbah</h2>
-            <div class="project-showcase-eyebrow">Digital Community Platform</div>
-            <p class="project-desc">A custom visual experience built for Haneen's community. This project features a bespoke logo identity, developed from a hand-drawn sketch Haneen created herself and wanted incorporated into the final mark, bridging the gap between personal artistry and a professional digital presence.</p>
-            <a href="https://haneensabbah.com" target="_blank" rel="noopener noreferrer" class="live-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View Live Site</a>
-          </div>
-          <div class="project-showcase-side">
-            <img src="https://i.postimg.cc/g0Rn0YbN/Haneen-Logo-(7).png" alt="Haneen Sabbah Logo" class="project-showcase-logo">
-            <div class="project-showcase-block">
-              <div class="project-showcase-label">Color Palette</div>
-              <div class="swatches">
-                <div class="swatch" title="#2C3E2D" style="background:#2C3E2D;"></div>
-                <div class="swatch" title="#F5F0E8" style="background:#F5F0E8;"></div>
-                <div class="swatch" title="#8B7355" style="background:#8B7355;"></div>
-                <div class="swatch" title="#4D7981" style="background:#4D7981;"></div>
+        <!-- Slide 1: Haneen Sabbah -->
+        <div class="carousel-slide active" data-duration="12000">
+          <div class="project-card project-showcase">
+            <div class="project-showcase-top">
+              <div class="project-showcase-main">
+                <h2 class="project-showcase-title">Haneen Sabbah</h2>
+                <div class="project-showcase-eyebrow">Digital Community Platform</div>
+                <p class="project-desc">A custom visual experience built for Haneen's community. This project features a bespoke logo identity, developed from a hand-drawn sketch Haneen created herself and wanted incorporated into the final mark, bridging the gap between personal artistry and a professional digital presence.</p>
+                <a href="https://haneensabbah.com" target="_blank" rel="noopener noreferrer" class="live-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View Live Site</a>
+              </div>
+              <div class="project-showcase-side">
+                <img src="https://i.postimg.cc/g0Rn0YbN/Haneen-Logo-(7).png" alt="Haneen Sabbah Logo" class="project-showcase-logo">
+                <div class="project-showcase-block">
+                  <div class="project-showcase-label">Color Palette</div>
+                  <div class="swatches">
+                    <div class="swatch" title="#2C3E2D" style="background:#2C3E2D;"></div>
+                    <div class="swatch" title="#F5F0E8" style="background:#F5F0E8;"></div>
+                    <div class="swatch" title="#8B7355" style="background:#8B7355;"></div>
+                    <div class="swatch" title="#4D7981" style="background:#4D7981;"></div>
+                  </div>
+                </div>
+                <div class="project-showcase-block">
+                  <div class="project-showcase-label">Design Method</div>
+                  <ul class="sol-list">
+                    <li>Hand-drawn icon digitizing</li>
+                    <li>User Interface architecture</li>
+                    <li>Responsive community UX</li>
+                  </ul>
+                </div>
               </div>
             </div>
-            <div class="project-showcase-block">
-              <div class="project-showcase-label">Design Method</div>
-              <ul class="sol-list">
-                <li>Hand-drawn icon digitizing</li>
-                <li>User Interface architecture</li>
-                <li>Responsive community UX</li>
-              </ul>
+
+            <!-- Click-to-play video facade: avoids loading the YouTube iframe (and its scripts)
+                 until the visitor actually wants to watch, which keeps initial page load fast -->
+            <div class="project-video" id="videoFacadeWrap">
+              <div class="project-video-facade" id="videoFacade" style="background-image:url('https://img.youtube.com/vi/BdT2dkUAMeM/hqdefault.jpg');">
+                <div class="play-btn">&#9654;</div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="project-video" id="videoFacadeWrap">
-          <div class="project-video-facade" id="videoFacade" style="background-image:url('https://img.youtube.com/vi/BdT2dkUAMeM/hqdefault.jpg');">
-            <div class="play-btn">&#9654;</div>
+        <!-- Slide 2: Montseira — Earth Creations -->
+        <div class="carousel-slide" data-duration="12000">
+          <div class="project-card">
+            <div class="project-img-duo">
+              <img src="https://i.postimg.cc/pd6F9QF6/10.png" alt="Montseira Earth Creations product design" loading="lazy" decoding="async" class="contain-img">
+              <img src="https://i.postimg.cc/rsxTGTYS/montseira-flyer.png" alt="Montseira Earth Creations store flyer" loading="lazy" decoding="async">
+            </div>
+            <div class="project-img-desc">
+              <div class="project-img-title">Montseira &middot; Earth Creations</div>
+              <p>To celebrate the launch of Montseira’s physical store, I designed a brand identity and a bilingual (EN/PT) promotional flyer. My goal was to drive local foot traffic through a cohesive visual style and clear, accessible print materials following the guidelines provided by the owner to ensure that her vision came true.</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Item 2: Montseira — Earth Creations -->
-      <div class="project-card">
-        <div class="project-img-duo">
-          <img src="https://i.postimg.cc/pd6F9QF6/10.png" alt="Montseira Earth Creations product design" loading="lazy" decoding="async" class="contain-img">
-          <img src="https://i.postimg.cc/rsxTGTYS/montseira-flyer.png" alt="Montseira Earth Creations store flyer" loading="lazy" decoding="async">
-        </div>
-        <div class="project-img-desc">
-          <div class="project-img-title">Montseira &middot; Earth Creations</div>
-          <p>To celebrate the launch of Montseira’s physical store, I designed a brand identity and a bilingual (EN/PT) promotional flyer. My goal was to drive local foot traffic through a cohesive visual style and clear, accessible print materials following the guidelines provided by the owner to ensure that her vision came true.</p>
-        </div>
       </div>
-
+    </div>
+    <div class="carousel-indicators">
+      <button class="carousel-dot active" data-carousel="design" data-index="0" aria-label="Show slide 1"></button>
+      <button class="carousel-dot" data-carousel="design" data-index="1" aria-label="Show slide 2"></button>
     </div>
   </div>
 </div>
 
-<!-- 02 ACTIVISM -->
-<div class="section-banner lav" id="activism">
+<!-- 02 CAROUSEL DESIGN (expandable) -->
+<div class="section-banner lav" id="carousels">
   <div class="banner-inner">
     <span class="banner-num">02</span>
+    <span class="banner-title">Carousel Design</span>
+    <span class="banner-sub">Social Media &amp; Campaign Carousels</span>
+  </div>
+</div>
+<div class="wrap-lav">
+  <div class="section reveal">
+      <div class="carousel-outer">
+        <div class="carousel-track" id="caroTrack">
+
+          <!-- Slide 1: Haneen Sabbah — Wild & Holy workshop carousel -->
+          <div class="carousel-slide active" data-duration="20000">
+            <div class="carousel-case">
+              <div class="carousel-case-header">
+                <div>
+                  <div class="carousel-case-eyebrow">Instagram Carousel</div>
+                  <div class="carousel-case-title">Wild &amp; Holy &middot; Haneen Sabbah</div>
+                </div>
+              </div>
+              <p class="carousel-case-desc">Designed the promo carousel for Haneen's "Wild &amp; Holy" writing workshop &mdash; a session exploring grief, joy, and paradox through poetry and guided writing. The brief called for a soft, editorial tone that matched the emotional register of the workshop itself, using a botanical motif and gentle type hierarchy to carry a long-form description across multiple slides without losing the reader.</p>
+              <div class="carousel-strip">
+                <img src="https://i.postimg.cc/d3KD7n9n/1.png" alt="Wild &amp; Holy workshop carousel slide 1">
+                <img src="https://i.postimg.cc/Vvc5S4Ft/2.png" alt="Wild &amp; Holy workshop carousel slide 2">
+                <img src="https://i.postimg.cc/76zfYjSX/3.png" alt="Wild &amp; Holy workshop carousel slide 3">
+              </div>
+              <a href="https://www.instagram.com/haneen.sabbah/" target="_blank" rel="noopener noreferrer" class="live-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View on Instagram</a>
+            </div>
+          </div>
+
+          <!-- Slide 2: Inactive Palestinian awareness collective -->
+          <div class="carousel-slide" data-duration="20000">
+            <div class="carousel-case link-only">
+              <div class="carousel-case-header">
+                <div>
+                  <div class="carousel-case-eyebrow">Instagram Carousels</div>
+                  <div class="carousel-case-title">Palestinian Awareness Collective</div>
+                </div>
+              </div>
+              <div class="carousel-case-body">
+                <div class="carousel-case-logo">
+                  <img src="https://i.postimg.cc/g2BVwFLM/412078270-1494216507819222-1414522417288718901-n-modified.png" alt="Palestinian Awareness Collective logo" loading="lazy" decoding="async">
+                </div>
+                <p class="carousel-case-desc">Carousel design work created as a volunteer designer for a Palestinian awareness collective, producing educational content on the cause &mdash; including boycott guidance and campaign explainers &mdash; for a community audience.</p>
+              </div>
+              <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="https://www.instagram.com/p/C1EyhTUMw_s/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener noreferrer" class="live-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View Carousel 1</a>
+                <a href="https://www.instagram.com/p/C1MiUaNo5Lu/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener noreferrer" class="live-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View Carousel 2</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="carousel-indicators">
+        <button class="carousel-dot active" data-carousel="caro" data-index="0" aria-label="Show slide 1"></button>
+        <button class="carousel-dot" data-carousel="caro" data-index="1" aria-label="Show slide 2"></button>
+      </div>
+  </div>
+</div>
+
+<!-- 03 ACTIVISM -->
+<div class="section-banner dark" id="activism">
+  <div class="banner-inner">
+    <span class="banner-num">03</span>
     <span class="banner-title">Solidarity &amp; Activism</span>
     <span class="banner-sub">Visual Communication as Resistance</span>
   </div>
 </div>
 
-<div class="wrap-lav">
+<div class="wrap-dark">
   <div class="section reveal">
-    <div class="cards-stack">
+    <div class="carousel-outer">
+      <div class="carousel-track" id="solTrack">
 
-      <!-- Item 1 -->
-      <div class="sol-card featured">
-        <div class="sol-card-grid">
-          <div class="sol-card-content">
-            <h3>Palestina em Portugu&ecirc;s</h3>
-            <p>Designed the logo and social media identity for Portugal&rsquo;s primary Portuguese-language platform dedicated to Palestinian news, history, and culture. Contributed carousel designs and graphics, and community outreach assets to an active audience across Instagram.</p>
-            <ul class="sol-list">
-              <li>Logo &amp; Brand Identity</li>
-              <li>Social Media Carousels</li>
-              <li>News &amp; Localization Graphics</li>
-            </ul>
-          </div>
-          <div class="sol-card-media">
-            <img src="https://i.postimg.cc/W3QjJzSJ/palestina-pt-logo.png" alt="Palestina em Português logo and identity" class="sol-real-img" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: contain;">
+        <!-- Slide 1: text left / image right -->
+        <div class="carousel-slide active" data-duration="10000">
+          <div class="sol-card featured">
+            <div class="sol-card-grid">
+              <div class="sol-card-content">
+                <h3>Palestina em Portugu&ecirc;s</h3>
+                <p>Designed the logo and social media identity for Portugal&rsquo;s primary Portuguese-language platform dedicated to Palestinian news, history, and culture. Contributed carousel designs and graphics, and community outreach assets to an active audience across Instagram.</p>
+                <ul class="sol-list">
+                  <li>Logo &amp; Brand Identity</li>
+                  <li>Social Media Carousels</li>
+                  <li>News &amp; Localization Graphics</li>
+                </ul>
+              </div>
+              <div class="sol-card-media">
+                <img src="https://i.postimg.cc/W3QjJzSJ/palestina-pt-logo.png" alt="Palestina em Português logo and identity" class="sol-real-img" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: contain;">
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Item 2 -->
-      <div class="sol-card">
-        <div class="sol-card-grid sol-flip">
-          <div class="sol-card-content">
-            <h3>Awareness Campaigns &amp; Flyers</h3>
-            <p>Created high-impact bilingual visual resources for public distribution as part of organized awareness campaigns, including physical flyers distributed on the International Day of Solidarity with my people. Work spanned historical data sheets, consumer boycott matrices, and humanitarian field summaries.</p>
-            <ul class="sol-list">
-              <li>Bilingual Print &amp; Digital Campaigns</li>
-              <li>International Day of Solidarity</li>
-              <li>Public Awareness Distribution</li>
-            </ul>
-          </div>
-          <div class="sol-card-media">
-            <img src="https://i.postimg.cc/G2qh591G/Flyers-design.png" alt="Bilingual awareness campaign flyer design" class="sol-real-img" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: contain;">
+        <!-- Slide 2: image left / text right (flipped) -->
+        <div class="carousel-slide" data-duration="10000">
+          <div class="sol-card">
+            <div class="sol-card-grid sol-flip">
+              <div class="sol-card-content">
+                <h3>Awareness Campaigns &amp; Flyers</h3>
+                <p>Created high-impact bilingual visual resources for public distribution as part of organized awareness campaigns, including physical flyers distributed on the International Day of Solidarity with my people. Work spanned historical data sheets, consumer boycott matrices, and humanitarian field summaries.</p>
+                <ul class="sol-list">
+                  <li>Bilingual Print &amp; Digital Campaigns</li>
+                  <li>International Day of Solidarity</li>
+                  <li>Public Awareness Distribution</li>
+                </ul>
+              </div>
+              <div class="sol-card-media">
+                <img src="https://i.postimg.cc/G2qh591G/Flyers-design.png" alt="Bilingual awareness campaign flyer design" class="sol-real-img" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: contain;">
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Item 3 -->
-      <div class="sol-card featured">
-        <div class="sol-card-grid">
-          <div class="sol-card-content">
-            <h3>On the Ground</h3>
-            <p>My work extends far beyond the screen. As an activist and an organizer for protests across Portugal, I created the visual language for our movement. Designing for direct action wasn't just professional—it was personal, born from the urgent need to honor my people in the face of attempted erasure.</p>
-            <ul class="sol-list">
-              <li>Protest Poster Design</li>
-              <li>Speaker &amp; Lead Organizer</li>
-              <li>Direct Action &amp; Narrative Resistance</li>
-            </ul>
-          </div>
-          <div class="sol-card-media">
-            <img src="https://i.postimg.cc/hjX0XRvn/protest.jpg" alt="Protest and community organizing" class="sol-real-img" loading="lazy" decoding="async">
+        <!-- Slide 3: text left / image right -->
+        <div class="carousel-slide" data-duration="10000">
+          <div class="sol-card featured">
+            <div class="sol-card-grid">
+              <div class="sol-card-content">
+                <h3>On the Ground</h3>
+                <p>My work extends far beyond the screen. As an activist and an organizer for protests across Portugal, I created the visual language for our movement. Designing for direct action wasn't just professional—it was personal, born from the urgent need to honor my people in the face of attempted erasure.</p>
+                <ul class="sol-list">
+                  <li>Protest Poster Design</li>
+                  <li>Speaker &amp; Lead Organizer</li>
+                  <li>Direct Action &amp; Narrative Resistance</li>
+                </ul>
+              </div>
+              <div class="sol-card-media">
+                <img src="https://i.postimg.cc/hjX0XRvn/protest.jpg" alt="Protest and community organizing" class="sol-real-img" loading="lazy" decoding="async" >
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
+      </div>
+    </div>
+    <div class="carousel-indicators">
+      <button class="carousel-dot active" data-carousel="sol" data-index="0" aria-label="Show slide 1"></button>
+      <button class="carousel-dot" data-carousel="sol" data-index="1" aria-label="Show slide 2"></button>
+      <button class="carousel-dot" data-carousel="sol" data-index="2" aria-label="Show slide 3"></button>
     </div>
   </div>
 </div>
 
-<!-- 03 LOGO DESIGN -->
-<div class="section-banner dark" id="logos">
+<!-- LOGO DESIGN -->
+<div class="section-banner lav" id="logos">
   <div class="banner-inner">
-    <span class="banner-num">03</span>
+    <span class="banner-num">04</span>
     <span class="banner-title">Logo Design</span>
     <span class="banner-sub">Brand Concepts &amp; Visual Identity</span>
   </div>
 </div>
 
-<div class="wrap-dark">
+<div class="wrap-lav">
   <div class="section reveal">
     <div class="logo-intro">
       <p>Every brand starts with a logo, and every logo starts with a conversation. I&rsquo;ve worked with clients ranging from small independent shops to personal platforms, helping them translate who they are into a mark that speaks before a single word is read. The brief is always the same: it needs to reflect the business concept, capture the direction it&rsquo;s heading, and above all, it needs to feel like the client.</p>
@@ -818,16 +1006,16 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   </div>
 </div>
 
-<!-- 04 EXPERIENCE -->
-<div class="section-banner lav" id="experience">
+<!-- 05 EXPERIENCE -->
+<div class="section-banner dark" id="experience">
   <div class="banner-inner">
-    <span class="banner-num">04</span>
+    <span class="banner-num">05</span>
     <span class="banner-title">Management Experience</span>
     <span class="banner-sub">Leadership &amp; Team Direction</span>
   </div>
 </div>
 
-<div class="wrap-lav">
+<div class="wrap-dark">
   <div class="section reveal">
     <div class="timeline">
 
@@ -912,16 +1100,16 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   </div>
 </div>
 
-<!-- 05 EDUCATION -->
-<div class="section-banner dark" id="education">
+<!-- 06 EDUCATION -->
+<div class="section-banner lav" id="education">
   <div class="banner-inner">
-    <span class="banner-num">05</span>
+    <span class="banner-num">06</span>
     <span class="banner-title">Education</span>
     <span class="banner-sub">Academic Background</span>
   </div>
 </div>
 
-<div class="wrap-dark">
+<div class="wrap-lav">
   <div class="section reveal">
     <div class="edu-list">
       <div class="edu-card">
@@ -1028,7 +1216,7 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   </div>
 </footer>
 
-<!-- LIGHTBOX -->
+<!-- LIGHTBOX (used for logos & logo-design concept tiles) -->
 <div class="lightbox-overlay" id="lightboxOverlay" role="dialog" aria-modal="true" aria-label="Enlarged image view">
   <button class="lightbox-close" id="lightboxClose" aria-label="Close enlarged image">&times;</button>
   <img class="lightbox-img" id="lightboxImg" src="" alt="">
@@ -1036,6 +1224,8 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
 
 <script>
 (function(){
+  // Small debounce helper — used on resize handlers so we don't recompute
+  // layout dozens of times per second while a window is being dragged.
   function debounce(fn, wait){
     var t;
     return function(){
@@ -1053,7 +1243,7 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
     navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
 
-  // Close nav on link click
+  // Close nav on link click (mobile)
   var links = navLinks.querySelectorAll('a');
   for(var i=0;i<links.length;i++){
     links[i].addEventListener('click', function(){
@@ -1072,18 +1262,72 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
     document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('visible'); });
   }
 
-  // Accordion
+  // Accordion (now on real <button> elements, so keyboard access is native)
   window.toggleExp = function(header){
     var item = header.parentElement;
     var isOpen = item.classList.toggle('open');
     header.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
   };
 
-  // Click-to-play YouTube facade
+  // Generic carousel — indicators live outside the height-limited/clipped outer
+  // div, so they stay visible and clickable no matter which slide is active.
+  function initCarousel(trackId, carouselKey){
+    var track = document.getElementById(trackId);
+    if(!track) return null;
+    var outer = track.parentElement;
+    var slides = Array.prototype.slice.call(track.querySelectorAll('.carousel-slide'));
+    var dots = Array.prototype.slice.call(document.querySelectorAll('[data-carousel="'+carouselKey+'"]'));
+    var current = 0;
+    var timer = null;
+    var stopped = false;
+
+    function setHeight(){
+      outer.style.height = slides[current].offsetHeight + 'px';
+    }
+
+    function go(index){
+      current = index;
+      track.style.transform = 'translateX(-'+(current*100)+'%)';
+      slides.forEach(function(s,i){ s.classList.toggle('active', i===current); });
+      dots.forEach(function(d,i){ d.classList.toggle('active', i===current); });
+      setHeight();
+      clearTimeout(timer);
+      if(stopped) return;
+      var dur = parseInt(slides[current].getAttribute('data-duration'),10) || 8000;
+      timer = setTimeout(function(){ go((current+1)%slides.length); }, dur);
+    }
+
+    function stopAutoplay(){
+      stopped = true;
+      clearTimeout(timer);
+    }
+
+    dots.forEach(function(dot){
+      dot.addEventListener('click', function(){ go(parseInt(dot.getAttribute('data-index'),10)); });
+    });
+
+    window.addEventListener('resize', debounce(setHeight, 150));
+    track.querySelectorAll('img').forEach(function(img){
+      if(!img.complete){ img.addEventListener('load', setHeight); }
+    });
+
+    go(0);
+
+    return { stop: stopAutoplay, refresh: setHeight };
+  }
+
+  var designCarousel = initCarousel('designTrack','design');
+  var solCarousel = initCarousel('solTrack','sol');
+  var caroCarousel = initCarousel('caroTrack','caro');
+
+  // Click-to-play YouTube facade — avoids loading the embed (and YouTube's scripts)
+  // until the visitor actually wants to watch, which keeps initial page load fast.
+  // Also stops the design carousel's autoplay so it doesn't advance mid-video.
   var videoWrap = document.getElementById('videoFacadeWrap');
   var videoFacade = document.getElementById('videoFacade');
   if(videoWrap && videoFacade){
     videoWrap.addEventListener('click', function(){
+      if(designCarousel) designCarousel.stop();
       var iframe = document.createElement('iframe');
       iframe.src = 'https://www.youtube.com/embed/BdT2dkUAMeM?autoplay=1&mute=1&loop=1&playlist=BdT2dkUAMeM&controls=1';
       iframe.title = 'Haneen Sabbah project showcase video';
@@ -1094,7 +1338,8 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
     }, { once:true });
   }
 
-  // Global image protection
+  // Global image protection: block right-click context menu and drag-start
+  // on every image site-wide, on top of the CSS user-select/drag lockout.
   document.addEventListener('contextmenu', function(e){
     if(e.target && e.target.tagName === 'IMG'){ e.preventDefault(); }
   });
@@ -1102,7 +1347,10 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
     if(e.target && e.target.tagName === 'IMG'){ e.preventDefault(); }
   });
 
-  // Lightbox
+  // Lightbox: click-to-enlarge for the Haneen logo, the Montseira images,
+  // every logo design concept tile, the Wild & Holy carousel slides, and
+  // the collective logo. These are the only images with pointer events
+  // re-enabled (see CSS), everything else stays locked down.
   var lightboxOverlay = document.getElementById('lightboxOverlay');
   var lightboxImg = document.getElementById('lightboxImg');
   var lightboxClose = document.getElementById('lightboxClose');
@@ -1119,7 +1367,7 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
     lightboxImg.src = '';
   }
 
-  document.querySelectorAll('.project-showcase-logo, .project-img-duo img, .logo-card img').forEach(function(img){
+  document.querySelectorAll('.project-showcase-logo, .project-img-duo img, .logo-card img, .carousel-strip img, .carousel-case-logo img').forEach(function(img){
     img.addEventListener('click', function(){
       openLightbox(img.currentSrc || img.src, img.alt);
     });
@@ -1150,6 +1398,7 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
     h = canvas.height = window.innerHeight;
   }, 150));
 
+  // Pause the animation loop when the tab isn't visible, to save CPU/battery
   document.addEventListener('visibilitychange', function(){
     running = !document.hidden;
     if(running && rafId === null) draw();
@@ -1179,3 +1428,4 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
 </script>
 </body>
 </html>
+
