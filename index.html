@@ -1,12 +1,11 @@
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#211a30">
-<title>Sarah Kuhail &middot; Visual Designer & Team Lead</title>
-<meta name="description" content="Sarah Kuhail is a Visual Designer & Team Lead specializing in brand identity, multilingual design systems, and web management, with leadership experience at Revolut, Meta, Foundever and Accenture.">
-<meta property="og:title" content="Sarah Kuhail &middot; Visual Designer & Team Lead">
+<title>Sarah Kuhail &middot; UI/UX &amp; Visual Designer</title>
+<meta name="description" content="Sarah Kuhail is a UI/UX &amp; Visual Designer specializing in brand identity, responsive web design, and multilingual design systems &mdash; working in Photoshop, WordPress and Elementor, with leadership experience at Revolut, Meta, Foundever and Accenture.">
+<meta property="og:title" content="Sarah Kuhail &middot; UI/UX &amp; Visual Designer">
 <meta property="og:description" content="Brand identity, logo design, and multilingual digital experiences.">
 <meta property="og:image" content="https://i.postimg.cc/fRZd9Tg5/Pic.jpg">
 <meta property="og:type" content="website">
@@ -315,6 +314,70 @@ nav{
   object-fit: contain;
 }
 
+/* SKILLS & TOOLS grid */
+.skills-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:16px;
+  margin-top:8px;
+}
+.skill-card{
+  background:#15101f4d;
+  border:1px solid var(--lav-border);
+  border-radius:14px;
+  padding:24px 16px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  text-align:center;
+  transition:transform .2s,border-color .2s,background .2s;
+}
+.skill-card:hover{transform:translateY(-2px);border-color:#d9c4ff55;background:#d9c4ff0d;}
+.skill-icon{
+  width:44px;height:44px;
+  border-radius:12px;
+  background:#ffffff;
+  object-fit:contain;
+  padding:8px;
+  flex-shrink:0;
+}
+.skill-name{
+  font-family:'DM Sans',sans-serif;
+  font-size:13.5px;
+  font-weight:600;
+  color:var(--ink-soft);
+}
+
+/* Mini case-study breakdown (Ask / Approach / Result) added to project cards */
+.case-mini{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+  margin:20px 0 4px;
+  padding-top:18px;
+  border-top:1px solid var(--line);
+}
+.case-mini-item{min-width:0;}
+.case-mini-label{
+  font-family:'DM Mono',monospace;
+  font-size:10.5px;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:6px;
+  display:block;
+}
+.case-mini-text{
+  font-size:13.5px;
+  color:var(--ink-soft);
+  line-height:1.6;
+}
+@media (max-width:760px){
+  .case-mini{grid-template-columns:1fr;gap:14px;}
+}
+
 /* All images across the site are non-interactive: no click-to-expand,
    no drag, no easy right-click save. See the global image-protection
    script at the bottom of the page. */
@@ -409,6 +472,29 @@ a img, button img{pointer-events:none;}
 .carousel-case.link-only .carousel-strip{grid-template-columns:1fr;}
 .carousel-case.link-only .carousel-strip-placeholder{aspect-ratio:auto;padding:26px;}
 @media (max-width:600px){.carousel-strip{grid-template-columns:repeat(3,1fr);}}
+
+/* Broker screenshot grid (Design Work — Dahab Stays slide): 4 tiles,
+   reuses the same placeholder look as the carousel strips above so
+   real screenshots can drop straight in as <img> tags later. */
+.broker-shots{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  padding:14px;
+  border-top:1px solid var(--line);
+  background:var(--bg-card);
+}
+.broker-shots .carousel-strip-placeholder{aspect-ratio:1/1;width:100%;}
+@media (max-width:900px){
+  .broker-shots{grid-template-columns:repeat(4,1fr);gap:10px;padding:12px;}
+}
+@media (max-width:760px){
+  .broker-shots{grid-template-columns:repeat(2,1fr);gap:10px;padding:12px;}
+}
+@media (max-width:480px){
+  .broker-shots{grid-template-columns:repeat(2,1fr);gap:8px;padding:10px;}
+  .broker-shots .carousel-strip-placeholder{font-size:10.5px;padding:10px;}
+}
 
 /* Collective case — logo + text side by side */
 .carousel-case-body{
@@ -710,7 +796,8 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
     <span class="nav-name">Sarah's Portfolio </span>
     <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">&#9776;</button>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#design-work">Design Work</a></li>
+      <li><a href="#design-work">Client Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
       <li><a href="#carousels">Carousels</a></li>
       <li><a href="#activism">Activism</a></li>
       <li><a href="#logos">Logo Design</a></li>
@@ -726,13 +813,17 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   <div class="hero-text">
     <h1>Sarah Kuhail </h1>
     <div class="hero-location">Legal Name: Zahra</div>
-    <p class="hero-subtitle">Visual Designer &amp; Team Lead</p>
+    <p class="hero-subtitle">UI/UX &amp; Visual Designer &middot; Web Design</p>
     <p class="hero-bio">Crafting enduring brand identities and high-performance digital experiences. With a leadership background at Revolut, Meta, Foundever and Accenture, I build multilingual design systems that meet your business needs.</p>
 
     <div class="hero-nationality">Palestinian Moroccan &middot; UK National &middot; Portugal Resident</div>
     <div class="hero-tags">
+      <span class="tag">UI/UX Design</span>
+      <span class="tag">Responsive Web Design</span>
       <span class="tag">Brand Identity</span>
-      <span class="tag">Web Management</span>
+      <span class="tag">Photoshop</span>
+      <span class="tag">WordPress</span>
+      <span class="tag">Elementor</span>
       <span class="tag">Logo Design</span>
       <span class="tag">Multilingual Design</span>
       <span class="tag">Team Management</span>
@@ -746,12 +837,12 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   </div>
 </header>
 
-<!-- 01 DESIGN WORK -->
+<!-- 01 CLIENT PROJECTS -->
 <div class="section-banner dark" id="design-work">
   <div class="banner-inner">
     <span class="banner-num">01</span>
-    <span class="banner-title">Design Work</span>
-    <span class="banner-sub">Client Brand Identity Projects</span>
+    <span class="banner-title">Client Projects</span>
+    <span class="banner-sub">Web Design, Branding &amp; UX for Real Businesses</span>
   </div>
 </div>
 <div class="wrap-dark">
@@ -766,7 +857,21 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
               <div class="project-showcase-main">
                 <h2 class="project-showcase-title">Haneen Sabbah</h2>
                 <div class="project-showcase-eyebrow">Digital Community Platform</div>
-                <p class="project-desc">A custom visual experience built for Haneen's community. This project features a bespoke logo identity, developed from a hand-drawn sketch Haneen created herself and wanted incorporated into the final mark, bridging the gap between personal artistry and a professional digital presence.</p>
+                <p class="project-desc">A custom visual experience built for Haneen's growing community, anchored by a bespoke logo identity developed from her own hand-drawn sketch.</p>
+                <div class="case-mini">
+                  <div class="case-mini-item">
+                    <span class="case-mini-label">The Ask</span>
+                    <p class="case-mini-text">A digital home for her community, built around a mark she'd sketched herself.</p>
+                  </div>
+                  <div class="case-mini-item">
+                    <span class="case-mini-label">The Approach</span>
+                    <p class="case-mini-text">Digitized the hand-drawn sketch into a polished logo, then built the site's UX around it.</p>
+                  </div>
+                  <div class="case-mini-item">
+                    <span class="case-mini-label">The Result</span>
+                    <p class="case-mini-text">A cohesive, personal brand and platform ready to scale with her audience.</p>
+                  </div>
+                </div>
                 <a href="https://haneensabbah.com" target="_blank" rel="noopener noreferrer" class="live-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View Live Site</a>
               </div>
               <div class="project-showcase-side">
@@ -801,7 +906,66 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
           </div>
         </div>
 
-        <!-- Slide 2: Montseira — Earth Creations -->
+        <!-- Slide 2: Sarah Ibrahim — Dahab Stays (Real Estate Broker) -->
+        <div class="carousel-slide" data-duration="12000">
+          <div class="project-card project-showcase">
+            <div class="project-showcase-top">
+              <div class="project-showcase-main">
+                <h2 class="project-showcase-title">Professional Website for Real Estate Broker</h2>
+                <div class="project-showcase-eyebrow">Sarah Ibrahim &middot; Dahab Stays</div>
+                <p class="project-desc">A multilingual (Arabic/English) website for a real estate broker matching visitors with trusted apartments, villas and holiday homes in Dahab, South Sinai.</p>
+                <div class="case-mini">
+                  <div class="case-mini-item">
+                    <span class="case-mini-label">The Ask</span>
+                    <p class="case-mini-text">A professional site to reach Arabic and English guests without relying on marketplace listings alone.</p>
+                  </div>
+                  <div class="case-mini-item">
+                    <span class="case-mini-label">The Approach</span>
+                    <p class="case-mini-text">Bilingual EN/AR layout built around her booking process, in a coastal color system pulled from Dahab itself.</p>
+                  </div>
+                  <div class="case-mini-item">
+                    <span class="case-mini-label">The Result</span>
+                    <p class="case-mini-text">A branded, trustworthy site guests can browse and contact her through directly.</p>
+                  </div>
+                </div>
+                <a href="https://sarah-ibr.github.io/broker/" target="_blank" rel="noopener noreferrer" class="live-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View Live Site</a>
+              </div>
+              <div class="project-showcase-side">
+                <div class="project-showcase-block">
+                  <div class="project-showcase-label">Color Palette</div>
+                  <div class="swatches">
+                    <div class="swatch" title="#7FBFDD" style="background:#7FBFDD;"></div>
+                    <div class="swatch" title="#5FA3C9" style="background:#5FA3C9;"></div>
+                    <div class="swatch" title="#93CBA0" style="background:#93CBA0;"></div>
+                    <div class="swatch" title="#FDF3EC" style="background:#FDF3EC;"></div>
+                  </div>
+                </div>
+                <div class="project-showcase-block">
+                  <div class="project-showcase-label">Design Method</div>
+                  <ul class="sol-list">
+                    <li>Bilingual EN/AR layout system</li>
+                    <li>Booking-focused visitor journey</li>
+                    <li>Coastal &amp; mountain color system</li>
+                    <li>Guest reviews &amp; contact integration</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Screenshot placeholders — replace each div below with an
+                 <img class="..." src="..." alt="..."> once screenshots are
+                 ready; the .carousel-strip img rule already makes them
+                 clickable/expandable in the lightbox, same as the logos. -->
+            <div class="carousel-strip broker-shots">
+              <div class="carousel-strip-placeholder" data-broker-shot="1">Screenshot 1<br>coming soon</div>
+              <div class="carousel-strip-placeholder" data-broker-shot="2">Screenshot 2<br>coming soon</div>
+              <div class="carousel-strip-placeholder" data-broker-shot="3">Screenshot 3<br>coming soon</div>
+              <div class="carousel-strip-placeholder" data-broker-shot="4">Screenshot 4<br>coming soon</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3: Montseira — Earth Creations -->
         <div class="carousel-slide" data-duration="12000">
           <div class="project-card">
             <div class="project-img-duo">
@@ -810,7 +974,21 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
             </div>
             <div class="project-img-desc">
               <div class="project-img-title">Montseira &middot; Earth Creations</div>
-              <p>To celebrate the launch of Montseira’s physical store, I designed a brand identity and a bilingual (EN/PT) promotional flyer. My goal was to drive local foot traffic through a cohesive visual style and clear, accessible print materials following the guidelines provided by the owner to ensure that her vision came true.</p>
+              <p>A brand identity and bilingual (EN/PT) promotional flyer designed to celebrate the launch of Montseira's physical store.</p>
+              <div class="case-mini">
+                <div class="case-mini-item">
+                  <span class="case-mini-label">The Ask</span>
+                  <p class="case-mini-text">Support the launch of a physical retail location with a matching brand identity.</p>
+                </div>
+                <div class="case-mini-item">
+                  <span class="case-mini-label">The Approach</span>
+                  <p class="case-mini-text">A cohesive visual identity and bilingual flyer, aligned to the owner's guidelines.</p>
+                </div>
+                <div class="case-mini-item">
+                  <span class="case-mini-label">The Result</span>
+                  <p class="case-mini-text">On-brand print and digital assets built to drive local foot traffic at launch.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -820,14 +998,50 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
     <div class="carousel-indicators">
       <button class="carousel-dot active" data-carousel="design" data-index="0" aria-label="Show slide 1"></button>
       <button class="carousel-dot" data-carousel="design" data-index="1" aria-label="Show slide 2"></button>
+      <button class="carousel-dot" data-carousel="design" data-index="2" aria-label="Show slide 3"></button>
     </div>
   </div>
 </div>
 
-<!-- 02 CAROUSEL DESIGN (expandable) -->
-<div class="section-banner lav" id="carousels">
+<!-- 02 SKILLS & TOOLS -->
+<div class="section-banner lav" id="skills">
   <div class="banner-inner">
     <span class="banner-num">02</span>
+    <span class="banner-title">Skills &amp; Tools</span>
+    <span class="banner-sub">Design &amp; Development Toolkit</span>
+  </div>
+</div>
+<div class="wrap-lav">
+  <div class="section reveal">
+    <div class="skills-grid">
+      <div class="skill-card">
+        <img class="skill-icon" src="https://www.google.com/s2/favicons?sz=128&domain=adobe.com" alt="Adobe Photoshop" loading="lazy" decoding="async" onerror="this.remove()">
+        <span class="skill-name">Photoshop</span>
+      </div>
+      <div class="skill-card">
+        <img class="skill-icon" src="https://www.google.com/s2/favicons?sz=128&domain=wordpress.org" alt="WordPress" loading="lazy" decoding="async" onerror="this.remove()">
+        <span class="skill-name">WordPress</span>
+      </div>
+      <div class="skill-card">
+        <img class="skill-icon" src="https://www.google.com/s2/favicons?sz=128&domain=elementor.com" alt="Elementor" loading="lazy" decoding="async" onerror="this.remove()">
+        <span class="skill-name">Elementor</span>
+      </div>
+      <div class="skill-card">
+        <img class="skill-icon" src="https://www.google.com/s2/favicons?sz=128&domain=figma.com" alt="Figma" loading="lazy" decoding="async" onerror="this.remove()">
+        <span class="skill-name">Figma</span>
+      </div>
+      <div class="skill-card">
+        <img class="skill-icon" src="https://www.google.com/s2/favicons?sz=128&domain=canva.com" alt="Canva" loading="lazy" decoding="async" onerror="this.remove()">
+        <span class="skill-name">Canva</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 03 CAROUSEL DESIGN (expandable) -->
+<div class="section-banner lav" id="carousels">
+  <div class="banner-inner">
+    <span class="banner-num">03</span>
     <span class="banner-title">Carousel Design</span>
     <span class="banner-sub">Social Media &amp; Campaign Carousels</span>
   </div>
@@ -887,10 +1101,10 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   </div>
 </div>
 
-<!-- 03 ACTIVISM -->
+<!-- 04 ACTIVISM -->
 <div class="section-banner dark" id="activism">
   <div class="banner-inner">
-    <span class="banner-num">03</span>
+    <span class="banner-num">04</span>
     <span class="banner-title">Solidarity &amp; Activism</span>
     <span class="banner-sub">Visual Communication as Resistance</span>
   </div>
@@ -971,10 +1185,10 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   </div>
 </div>
 
-<!-- LOGO DESIGN -->
+<!-- 05 LOGO DESIGN -->
 <div class="section-banner lav" id="logos">
   <div class="banner-inner">
-    <span class="banner-num">04</span>
+    <span class="banner-num">05</span>
     <span class="banner-title">Logo Design</span>
     <span class="banner-sub">Brand Concepts &amp; Visual Identity</span>
   </div>
@@ -1006,10 +1220,10 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   </div>
 </div>
 
-<!-- 05 EXPERIENCE -->
+<!-- 06 EXPERIENCE -->
 <div class="section-banner dark" id="experience">
   <div class="banner-inner">
-    <span class="banner-num">05</span>
+    <span class="banner-num">06</span>
     <span class="banner-title">Management Experience</span>
     <span class="banner-sub">Leadership &amp; Team Direction</span>
   </div>
@@ -1100,10 +1314,10 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
   </div>
 </div>
 
-<!-- 06 EDUCATION -->
+<!-- 07 EDUCATION -->
 <div class="section-banner lav" id="education">
   <div class="banner-inner">
-    <span class="banner-num">06</span>
+    <span class="banner-num">07</span>
     <span class="banner-title">Education</span>
     <span class="banner-sub">Academic Background</span>
   </div>
@@ -1428,4 +1642,3 @@ footer{background:var(--bg-lav);border-top:1px solid var(--lav-border);padding:5
 </script>
 </body>
 </html>
-
